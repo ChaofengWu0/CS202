@@ -1,3 +1,24 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2022/05/11 19:57:00
+// Design Name: 
+// Module Name: MemOrIO
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rdata, r_wdata, r_rdata, write_data, LEDCtrl, SwitchCtrl);
     input mRead; // read memory, from Controller
     input mWrite; // write memory, from Controller
@@ -18,7 +39,7 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
 
     assign addr_out= addr_in;
     // The data wirte to register file may be from memory or io. 
-    assign r_wdata = ( mRead == 1'b1 ) ? m_rdata : {16{1'b0},io_rdata};
+    assign r_wdata = ( mRead == 1'b1 ) ? m_rdata : {16'b0000_0000_0000_0000 ,io_rdata};
     // While the data is from io, it should be the lower 16bit of r_wdata. 
     // Chip select signal of Led and Switch are all active high;
 
@@ -41,8 +62,9 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
     always @* begin
         if((mWrite==1)||(ioWrite==1))
             //wirte_data could go to either memory or IO. where is it from?
-            write_data = r_rdata;
+            write_data =  r_rdata;
         else
             write_data = 32'hZZZZZZZZ;
     end
 endmodule
+
