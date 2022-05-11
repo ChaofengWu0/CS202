@@ -5,9 +5,11 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
     input ioWrite; // write IO, from Controller
     input[31:0] addr_in; // from alu_result in ALU
     output[31:0] addr_out; // address to Data-Memory
+    
     input[31:0] m_rdata; // data read from Data-Memory
     input[15:0] io_rdata; // data read from IO,16 bits
     output[31:0] r_wdata; // data to Decoder(register file)
+
     input[31:0] r_rdata; // data read from Decoder(register file)
     output reg[31:0] write_data; // data to memory or I/O（m_wdata, io_wdata）
     output LEDCtrl; // LED Chip Select
@@ -15,15 +17,31 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
 
 
     assign addr_out= addr_in;
-    // The data wirte to register file may be from memory or io. // While the data is from io, it should be the lower 16bit of r_wdata. 
-    assign r_wdata = ？？？
+    // The data wirte to register file may be from memory or io. 
+    assign r_wdata = ( mRead == 1'b1 ) ? m_rdata : {16{1'b0},io_rdata};
+    // While the data is from io, it should be the lower 16bit of r_wdata. 
     // Chip select signal of Led and Switch are all active high;
-    assign LEDCtrl= ？？？
-    assign SwitchCtrl= ？？
+
+
+
+ 
+ 
+ 
+ 
+    // assign LEDCtrl= ？？？
+    // assign SwitchCtrl= ？？
+ 
+ 
+
+
+
+
+ 
+ 
     always @* begin
         if((mWrite==1)||(ioWrite==1))
             //wirte_data could go to either memory or IO. where is it from?
-            write_data = 
+            write_data = r_rdata;
         else
             write_data = 32'hZZZZZZZZ;
     end
