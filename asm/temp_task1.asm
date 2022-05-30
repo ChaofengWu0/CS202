@@ -128,37 +128,34 @@ sw   $8,0xC60($28)
 j load_data
 
 
-#9寄存器作为辅助寄存器
+#9,12寄存器作为辅助寄存器
 case6:
 addi  $9,$7,0
+addi  $12,$6,0
 circle6:
-sll     $8,$6,1
+sll     $12,$12,1
 sub  $9,$9,$21
 bne   $9,$0,circle6
+sw    $12,0xC60($28)
 j load_data
 
 case7:
 addi  $9,$7,0
+addi  $12,$6,0
 circle7:
-srl     $8,$6,1
+srl     $12,$12,1
 sub   $9,$9,$21
 bne   $9,$0,circle7
+sw    $12,0xC60($28)
 j load_data
 
 case8:
 addi  $9,$7,0
+addi  $12,$6,0
 circle8:
-sra   $8,$6,1
+sra   $12,$12,1
 sub  $9,$9,$21
 bne   $9,$0,circle8
+sw    $12,0xC60($28)
 j  load_data
-
-
-
-
-
-
-
-
-
 
