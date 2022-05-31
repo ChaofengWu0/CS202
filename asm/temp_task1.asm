@@ -18,7 +18,7 @@ j main_func
 # 5寄存器用来获取测试场景的值
 # 每次load_data的时候，就会刷新1,2,3, 4,5寄存器的值
 load_data:
-lui   $1,0xFFFF   
+lui    $1,0xFFFF   
 ori   $28,$1,0xF000        
 switled_func: 
 lw   $1,0xC70($28) 
@@ -29,19 +29,30 @@ srl     $5,$5,5
 addi  $4,$1,0
 #sw   $3,0xC62($28)
 
-andi $2,$3,1
+andi  $2,$3,1
+srl     $3,$3,1
+andi  $13,$3,1
 # 2已经取到了左边第八位的数
 
 # 这两行可要可不要
 #sw   $1,0xC60($28)    
 #sw   $3,0xC62($28)  
 
-beq  $2,$21,during
+beq  $2,$21,check_enter
+
+check_enter:
+beq  $13,$21,during
+
 j switled_func
 during:
 lw   $3,0xC72($28)  
 andi $2,$3,1
-beq $2,$20,test1
+beq $2,$20,check_out
+check_out:
+lw   $3,0xC72($28)  
+srl    $3,$3,1
+andi $2,$3,1
+beq $2,$21,test1
 j during
 #ra寄存器
 # 到此为止 方法体load_data写完了，其中
