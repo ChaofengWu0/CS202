@@ -52,7 +52,7 @@ check_out:
 lw   $3,0xC72($28)  
 srl    $3,$3,1
 andi $2,$3,1
-beq $2,$21,test1
+beq $2,$20,test1
 j during
 #ra寄存器
 # 到此为止 方法体load_data写完了，其中
