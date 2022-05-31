@@ -156,81 +156,10 @@ case0:
         beq $10, $7, scene_begin # 正常状态应为secen_begin
         j loop_input
 
-test_case_0:
-    # 仅用于调试 显示内存组0中的数值
-    # 此模式中 最左侧led灯常亮 
-    lui $9, 0x1001
-    addi $10, $20, 0
-    addi $11, $20, 0
-
-    test_loop:
-        lw $6, 0xC40($28)
-        bne $6, $21, test_loop
-
-        wait_button_zero_test_0:
-            lw $6, 0xC40($28)
-            bne $6, $22, wait_button_zero_test_0
-
-        lw $11, 0($9)
-        sw $11, 0xC60($28)
-
-        addi $10, $10, 1
-        addi $9, $9, 4
-        bne $10, $7, test_loop
-    
-    wait_button_signal_test_1:
-        lw $6, 0xC40($28)
-        bne $6, $21, wait_button_signal_test_1
-
-    wait_button_zero_test_1:
-        lw $6, 0xC40($28)
-        bne $6, $22, wait_button_zero_test_1
-
-    # 显示完所有数据后再次按下按键 灯全灭
-    sw $20, 0xC60($28)
-    j scene_begin
-# test_case end
-
 # case0结束
 
 case1:
     j place
-temp_1:
-
-addi  $1,$1,1000
-sw    $1,0xC60($28)
-end:
-j end
-
-
-
-#2号寄存器存要读取的地址
-lui $2,0x1001
-ori $2,$2,0x28
-#1号寄存器存储总共的位数
-addi $1,$7,0
-
-circle_test:
-addi $1,$1,-1
-#把值存在3号寄存器中
-lw   $3,0($2)
-#加4
-addi $2,$2,4
-#5号寄存器用来判断
-lw    $5,0xC40($28)
-bne  $5,$21,check_out
-
-check_out:
-sw   $3,0xC60($28)
-lw    $5,0xC40($28)
-bne  $5,$21,check_out
-
-
-bne $1,$0,circle_test
-end_test:
-j end_test
-
-
 
 
 #单独的一个方法段，用来把9寄存器内的值转移到想要放置的地址的位置
@@ -281,11 +210,11 @@ beq  $12,$20,exit_inner
 sll $13,$11,2
 add $13,$13,$14
 lw    $15,0($13)
-# 这里是拿arr[j]的过程    13 = arr[j]
+# 这里是拿arr[j]的过程    16 = arr[j]
 sll     $13,$10,2
 add  $13,$13,$14
 lw    $16,0($13)
-slt    $12,$15,$13
+slt    $12,$15,$16
 beq  $12,$21,increament
 addi $11,$10,0
 
@@ -301,20 +230,78 @@ addi $9,$9,1
 j outer_loop
 
 exit_outer:
-j temp_1
+j test_case_1
 
 
 swap:
+addi $19,$20,127
+sw $19, 0xC62($28)
+
 #得到第一个地址,存到13(中转寄存器),并且将值存入15寄存器
 sll    $13,$9,2
 add  $13,$13,$14
 lw  $15,0($13)
 
 sll    $17,$11,2
-add  $17,$17,$11
+add  $17,$17,$14
 lw  $16,0($17)
 
 sw  $16,0($13)
 sw  $15,0($17) 
 j back
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+test_case_1:
+    lui $9, 0x1001
+    addi $9, $9, 0x0028
+    addi $10, $20, 0
+    addi $11, $20, 0
+
+    test_loop_1:
+        lw $6, 0xC40($28)
+        bne $6, $21, test_loop_1
+
+        wait_button_zero_test_2_0:
+            lw $6, 0xC40($28)
+            bne $6, $22, wait_button_zero_test_2_0
+
+        lw $11, 0($9)
+        sw $11, 0xC60($28)
+
+        addi $10, $10, 1
+        addi $9, $9, 4
+        bne $10, $7, test_loop_1
+    
+    wait_button_signal_test_2_1:
+        lw $6, 0xC40($28)
+        bne $6, $21, wait_button_signal_test_2_1
+
+    wait_button_zero_test_2_1:
+        lw $6, 0xC40($28)
+        bne $6, $22, wait_button_zero_test_2_1
+
+    # 显示完所有数据后再次按下按键 灯全灭
+    sw $20, 0xC60($28)
+    j scene_begin
 
