@@ -304,4 +304,3 @@ test_case_1:
     # 显示完所有数据后再次按下按键 灯全灭
     sw $20, 0xC60($28)
     j scene_begin
-
