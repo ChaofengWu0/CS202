@@ -225,15 +225,17 @@ j       exchange
 
 same_signbit:
 beq   $17,$20,zero
-
+j  one
+zero:
+slt    $12,$15,$16
+j exchange
+one:
 andi  $15,$15,127
 andi  $16,$16,127
 
 slt    $12,$16,$15
 j  exchange
 
-zero:
-slt    $12,$16,$15
 exchange:
 #判断是否要更换值
 beq  $12,$21,increament
